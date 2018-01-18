@@ -59,6 +59,7 @@ class chaptersModel extends Model {
 				DELETE
 				FROM `blog_billets`
 				WHERE `id` = :id
+				
 				LIMIT 1
 			');
 			$delete->bindParam(':id', $ident, PDO::PARAM_INT);
