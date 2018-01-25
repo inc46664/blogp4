@@ -5,7 +5,6 @@ define('ROOT', str_replace('get.php', null, $_SERVER['SCRIPT_FILENAME']));
 
 require_once(ROOT.'public/inc/db.php');
 require_once(ROOT.'public/inc/config.php');
-
 require_once(ROOT.'model/model.php');
 require_once(ROOT.'model/userClass.php');
 require_once(ROOT.'model/loggingClass.php');
