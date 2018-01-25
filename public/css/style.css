@@ -252,6 +252,9 @@ form input[type="password"].textbox {
       background: none;
       font-weight: bold;
       font-size: 1.1em;
+} form input[type="submit"].sub.smallsize {
+	padding: 6px 8px;
+	font-size: 1em;
 } form input[type="submit"].sub:hover {
       background: rgb(230,230,230);
 } form input[type="checkbox"].checkbox {
@@ -266,6 +269,16 @@ form input[type="password"].textbox {
       display: inline-block;
       font-weight: normal;
       cursor: pointer;
+} form textarea.newmsg {
+	display: block;
+	width: calc(100% - 10px);
+	border: none;
+	color: rgb(230,230,230);
+	max-height: 400px;
+	font-size: 1em;
+	background: none;
+	resize: vertical;
+	outline: none;
 }
 
 
@@ -646,3 +659,38 @@ div.profile section.head span.user {
 }
 
 
+table.listComs {
+	position: relative;
+	display: block;
+	width: 80%;
+	border-collapse: collapse;
+	text-align: center;
+} table.listComs tbody {
+	display: block;
+	width: 100%;
+} table.listComs tr {
+	width: 100%;
+}
+table.listComs tr th,
+table.listComs tr td
+{
+	text-align: left;
+	padding: 10px;
+	border: 1px solid rgb(170,170,170);
+}
+table.listComs tr.head th,
+table.listComs tr.head td
+{
+	background: rgb(190,190,190);
+}
+table.listComs td a {
+	display: inline-block;
+	vertical-align: middle;
+	padding: 0 2px;
+	color: rgb(0,90,120);
+	text-decoration: none;
+	cursor: pointer;
+} table.listComs td a:hover {
+	text-decoration: underline;
+	color: rgb(15,15,15);
+}

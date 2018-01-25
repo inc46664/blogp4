@@ -17,4 +17,8 @@ class Controller {
 		require_once(ROOT.'model/connexion.php');
 	}
 	
+	public function manager() {
+		require_once(ROOT.'model/manager.php');
+	}
+	
 }

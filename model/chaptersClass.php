@@ -59,7 +59,6 @@ class chaptersModel extends Model {
 				DELETE
 				FROM `blog_billets`
 				WHERE `id` = :id
-				
 				LIMIT 1
 			');
 			$delete->bindParam(':id', $ident, PDO::PARAM_INT);
@@ -70,9 +69,10 @@ class chaptersModel extends Model {
 		}
 	}
 	
-	public function create($numero=1, $titre=null, $url=null, $extrait=null, $content=null, $bdd, $User) {
+	public function create($numero=1, $titre=null, $extrait=null, $content=null, $bdd, $User) {
 		if($User->isAdmin()) {
-			if($numero && $titre && $url && $extrait && $content) {
+			if($numero && $titre && $extrait && $content) {
+				$url = strtolower(str_replace(array(' ', ':', '@', ';', '_'), '-', $titre));
 				$username = $User->get('pseudo');
 				$insert = $bdd->prepare('
 					INSERT INTO

@@ -42,10 +42,25 @@
 				<?php if($EditMode === false) { ?>
 				<section class="coms" id="_coms" >
 					<h4 class="ttr title titre" >Espace commentaires</h4>
-					<div class="getcoms" ><?= listComments($COMMENTS, $User); ?></div>
+					<div class="getcoms" >
+						<?php if($User->isLogged()) { ?>
+						<article class="Comment" id="write" >
+							<div class="msg-head" >
+								<span class="user" ><?= $User->get('pseudo') ?></span>
+							</div>
+							<div class="msg-body" >
+								<form method="POST" >
+									<textarea name="write_text" class="newmsg" placeholder="Message..." ></textarea>
+									<input type="submit" class="sub smallsize" value="Poster" name="write_post" />
+								</form>
+							</div>
+						</article>
+						<?php } ?>
+						<?= listComments($COMMENTS, $BILLET, $User); ?>
+					</div>
 				</section>
 				<?php } ?>
-                  
+                
             </div>
 			
 		</section>

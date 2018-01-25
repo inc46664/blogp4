@@ -59,8 +59,62 @@ function dateFr($date, $template='?') {
 	return $template;
 }
 
-function listComments($COMMENTS, $User) {
-	
+function listComments($COMMENTS=array(), $Billet, $User) {
+	for($n=0;$n!=count($COMMENTS);$n++) {
+		
+		$Com = $COMMENTS[$n];
+		
+		if($Com['cast'] == 1) { ?>
+		
+		<article class="Comment" id="com_<?php echo $Com['uniqueid']; ?>" >
+			<?php if($User->isAdmin()) { ?>
+			<span class="report <?php if($Com['reports'] >= 10) { echo 'high'; } elseif($Com['reports'] >= 5) { echo 'med'; } else { echo 'low'; } ?>" title="Reports" >
+				<p><span><?php echo $Com['reports']; ?></span></p>
+			</span>
+			<?php } ?>
+			<div class="msg-head" >
+				<span class="user" ><?php echo $Com['pseudo']; ?></span>
+				<span class="date" ><?php echo dateFr($Com['date_post'], 'Le %1%/%2%/%3% à %4%h%5%'); ?></span>
+				<?php if($User->isLogged()) {
+					if(strtolower($Com['pseudo']) != strtolower($User->get('pseudo'))) { ?>
+					<span class="act" >
+						<?php if(!preg_match('#!'.strtolower($User->get('pseudo')).'!#', $Com['users_report'])) { ?>
+							<a class="report" href="<?php echo WEBROOT.'chapitres/lire/'.$Billet['url'].'/report/'.$Com[0]; ?>" title="Signaler un mauvais commentaire" ><i class="fa fa-flag" aria-hidden="true"></i></a>
+						<?php } else { ?>
+							<a class="report used" href="#" title="Vous avez déjà signalé ce commentaire" ><i class="fa fa-flag" aria-hidden="true"></i></a>
+						<?php } ?>
+					</span>
+					<?php } else { ?>
+					<span class="act" >
+						<a class="remove" href="<?php echo WEBROOT.'chapitres/lire/'.$Billet['url'].'/remove/'.$Com[0]; ?>" title="Supprimer le commentaire" ><i class="fa fa-times" aria-hidden="true"></i></a>
+					</span>
+					<?php }
+				} ?>
+			</div>
+			<div class="msg-body" >
+				<p><?php echo nl2br(trim(htmlspecialchars($Com['content']))); ?></p>
+			</div>
+		</article>
+		
+		<?php }
+	}
+}
+
+function listCheckComments($Comments, $User) {
+	for($n=0;$n!=count($Comments);$n++) {
+		$Com = $Comments[$n];
+		?>
+		<tr id="_manage-<?= $Com[$n] ?>" class="unite" >
+			<th><?= $Com['reports'] ?></th>
+			<td><?= $Com['pseudo'] ?></td>
+			<td><?= htmlspecialchars($Com['content']) ?></td>
+			<td><?= datefr($Com['date_post'], '%1%/%2%/%3% à %4%h%5%') ?></td>
+			<td>
+				<a onClick="toggleComment('allow', <?= $Com['id'] ?>, '<?= WEBROOT ?>');" >Valider</a>
+				<a onClick="toggleComment('deny', <?= $Com['id'] ?>, '<?= WEBROOT ?>');" >Supprimer</a>
+			</td>
+		</tr>
+	<?php }
 }
 
 function listChapters($CHAPITRES=array(), $User, $bdd, $comsEngine) {

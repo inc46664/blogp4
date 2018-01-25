@@ -23,11 +23,6 @@
 				</fieldset>
 				
 				<fieldset>
-					<label>Url du chapitre</label>
-					<input name="_CreateUrl" class="textbox" type="text" placeholder="chapitre-10-lorem-ipsum" required="required" />
-				</fieldset>
-				
-				<fieldset>
 					<label>Extrait du chapitre</label>
 					<input name="_CreateExt" class="textbox" type="text" required="required" />
 				</fieldset>

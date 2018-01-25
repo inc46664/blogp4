@@ -2,7 +2,7 @@
 if($action == 'index') {
 	
 	// Index page
-	$CHAPITRES = $chapEngine->getChapters('*', '`broadcast` = 1', 'order by `date_create` DESC', 'LIMIT 10', array(), $bdd, $comsEngine);
+	$CHAPITRES = $chapEngine->getChapters('*', '`broadcast` = 1', 'order by `num` DESC', null, array(), $bdd, $comsEngine);
 	
 } else if ($action == 'lire') {
 	
@@ -18,8 +18,23 @@ if($action == 'index') {
 	$EditMode = false;
 	$Edited = null;
 	if(isset($arguments[3])) {
+		// Editer le billet
 		if(strtolower($arguments[3]) == 'edit' && $User->isAdmin()) {
 			$EditMode = true;
+		}
+		// Supprimer un commentaire
+		else if (strtolower($arguments[3]) == 'remove' && isset($arguments[4])) {
+			$remove_id = $arguments[4];
+			if(is_numeric($remove_id) && $remove_id > 0) {
+				$comsEngine->remove($remove_id, $User, $bdd);
+			}
+		}
+		// Signaler un commentaire
+		else if (strtolower($arguments[3]) == 'report' && isset($arguments[4])) {
+			$report_id = $arguments[4];
+			if(is_numeric($report_id) && $report_id > 0) {
+				$comsEngine->report($report_id, $User, $bdd);
+			}
 		}
 	}
 	
@@ -36,6 +51,19 @@ if($action == 'index') {
 				$Edited = $chapEngine->editContent($text, $BILLET[0], $bdd);
 				$BILLET['content'] = $text;
 			}
+			
+			// Si post newcom
+			if(isset($_POST['write_text']) && isset($_POST['write_post']) && $User->isLogged()) {
+				$text = $_POST['write_text'];
+				if($text != null || strlen($text) > 1) {
+					$response_postcom = $comsEngine->write($BILLET[0], $text, $User, $bdd);
+				}
+			}
+			
+			// Commentaires
+			$COMMENTS = $comsEngine->getComments($BILLET[0], $bdd);
+			
+			if(isset($response_postcom)) { go('#com_'.$response_postcom, 0); }
 			
 		}
 		
@@ -56,14 +84,13 @@ if($action == 'index') {
 	
 	// Page creation billet
 	
-	if($User->isAdmin() && isset($_POST['_CreateNum']) && isset($_POST['_CreateTitre']) && isset($_POST['_CreateUrl']) && isset($_POST['_CreateExt']) && isset($_POST['_CreateText'])) {
+	if($User->isAdmin() && isset($_POST['_CreateNum']) && isset($_POST['_CreateTitre']) && isset($_POST['_CreateExt']) && isset($_POST['_CreateText'])) {
 		$numero = trim(htmlentities($_POST['_CreateNum']));
 		$titre = trim($_POST['_CreateTitre']);
-		$url = trim(strtolower(htmlentities($_POST['_CreateUrl'])));
 		$extrait = trim($_POST['_CreateExt']);
 		$content = trim($_POST['_CreateText']);
 		if(!is_numeric($numero) || $numero < 1) { $numero = 1; }
-		$response = $chapEngine->create($numero, $titre, $url, $extrait, $content, $bdd, $User);
+		$response = $chapEngine->create($numero, $titre, $extrait, $content, $bdd, $User);
 	}
 	
 }
