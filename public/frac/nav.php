@@ -23,7 +23,7 @@
 		<ol class="list" >
 			<li><a id="__nav2" class="link<?php if($CONFIG['head']['pageid'] == 1) { echo ' selected'; } ?>" href="<?php echo WEBROOT.'chapitres/'; ?>" ><i class="fa fa-book" aria-hidden="true"></i> Chapitres</a></li>
 			<?php if($User->isAdmin()) { ?><li><a id="__nav7" class="link<?php if($CONFIG['head']['pageid'] == 6) { echo ' selected'; } ?>" href="<?php echo WEBROOT.'manager/'; ?>" ><i class="fa fa-users" aria-hidden="true"></i> Manager</a></li><?php } ?>
-			<li><a id="__nav6" class="link<?php if($CONFIG['head']['pageid'] == 5) { echo ' selected'; } ?>" href="<?php echo WEBROOT.'profil/logout/'; ?>" ><i class="fa fa-sign-out" aria-hidden="true"></i> Déconnexion</a></li>
+			<li><a id="__nav6" class="link<?php if($CONFIG['head']['pageid'] == 5) { echo ' selected'; } ?>" href="<?php echo WEBROOT.'logout/'; ?>" ><i class="fa fa-sign-out" aria-hidden="true"></i> Déconnexion</a></li>
 		</ol>
 	</section>
 	<?php } ?>

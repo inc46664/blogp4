@@ -21,4 +21,8 @@ class Controller {
 		require_once(ROOT.'model/manager.php');
 	}
 	
+	public function logout() {
+		require_once(ROOT.'model/logout.php');
+	}
+	
 }

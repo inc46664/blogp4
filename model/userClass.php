@@ -48,4 +48,11 @@ class User {
 		}
 	}
 	
+	public function logout() {
+		$_SESSION['user'] = 'lawl';
+		setcookie('remuser', '', time()-1000, '/');
+		$this->setLogged(false);
+		$this->setAdmin(false);
+	}
+	
 }
