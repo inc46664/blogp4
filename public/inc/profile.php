@@ -1,17 +1,11 @@
 <?php
-class User {
+class Profile {
 	
-	public $logged = false;
-	public $admin = false;
-	public $userinfo = array(
+	private $logged = false;
+	private $admin = false;
+	private $userinfo = array(
 		'id' => 0,
-		'pseudo' => "",
-		'email' => "",
-		'ip_in' => "",
-		'ip_co' => "",
-		'date_in' => "",
-		'uniqueid' => "",
-		'perm_post' => ""
+		'pseudo' => ""
 	);
 	
 	public function isLogged() {
@@ -22,13 +16,13 @@ class User {
 		return $this->admin;
 	}
 	
-	public function setAdmin($boolean) {
+	public function setAdmin($boolean=true) {
 		if(is_bool($boolean)) {
 			$this->admin = $boolean;
 		}
 	}
 	
-	public function setLogged($boolean) {
+	public function setLogged($boolean=true) {
 		if(is_bool($boolean)) {
 			$this->logged = $boolean;
 		}

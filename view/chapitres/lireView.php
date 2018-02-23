@@ -1,72 +1,51 @@
 <?php
 	require_once(ROOT.'public/frac/head.php');
 	require_once(ROOT.'public/frac/nav.php');
-	// Check des données
-	if(!isset($BILLET)) { $BILLET = array(); }
-	if(!isset($COMMENTS)) { $COMMENTS = array(); }
-	if(!isset($Edited)) { $Edited = null; }
 ?>
 
 <div class="page" >
-	<div class="content type1" >
-		<?php if(count($BILLET) > 2) { ?>
-		<h3 class="ttr title titre" ><?= $BILLET['titre']; ?></h3>
-		<section class="content" >
-			
-			<div class="billet-page" >
-                <section class="head" >
-					<span class="date" ><i class="fa fa-clock-o" aria-hidden="true"></i> <?php echo dateFr($BILLET['date_create'], 'Publié le %1%/%2%/%3% à %4%h'); ?></span>
-					<span class="date" ><i class="fa fa-clock-o" aria-hidden="true"></i> <?php echo dateFr($BILLET['date_update'], 'Dernière mise à jour le %1%/%2%/%3% à %4%h%5%'); ?></span>
-					<span class="user" ><i class="fa fa-user" aria-hidden="true" ></i> Ajouté par <?php echo $BILLET['pseudo']; ?></span>
-					<span class="coms" ><i class="fa fa-comment-o" ></i> <?= $comsEngine->getCountComments($BILLET[0], $bdd); ?> Commentaire(s)</span>
-					<?php if($User->isAdmin()) { if($EditMode === true) { ?>
-					<a class="admin-button small" href="/blog/chapitres/lire/<?php echo $BILLET['url'].'/' ?>"><i class="fa fa-pencil" aria-hidden="true"></i> Fermer l'éditeur</a>
-					<?php } else { ?>
-					<a class="admin-button small" href="/blog/chapitres/lire/<?php echo $BILLET['url'].'/edit/' ?>"><i class="fa fa-pencil" aria-hidden="true"></i> Editer</a>
-					<a class="admin-button small" href="/blog/chapitres/delete/<?php echo $BILLET[0].'/' ?>"><i class="fa fa-trash" aria-hidden="true"></i> Supprimer</a>
-					<?php } } ?>
-				</section>
-                
-				<section class="content" >
-					<div class="inset" >
-						<?php if($EditMode === true) { ?>
-						<form method="POST" class="tinymce" >
-							<textarea class="tinymce" name="_edit-text" id="_tarea" ><?= nl2br($BILLET['content']) ?></textarea>
-							<?php if($Edited != null) { info('info', $Edited); } ?>
-							<input type="submit" class="sub" name="_edit-sub" value="Enregistrer" />
-						</form>
-						<?php } else { echo nl2br($BILLET['content']); } ?>
-					</div>
-				</section>
-                
-				<?php if($EditMode === false) { ?>
-				<section class="coms" id="_coms" >
-					<h4 class="ttr title titre" >Espace commentaires</h4>
-					<div class="getcoms" >
-						<?php if($User->isLogged()) { ?>
-						<article class="Comment" id="write" >
-							<div class="msg-head" >
-								<span class="user" ><?= $User->get('pseudo') ?></span>
-							</div>
-							<div class="msg-body" >
-								<form method="POST" >
-									<textarea name="write_text" class="newmsg" placeholder="Message..." ></textarea>
-									<input type="submit" class="sub smallsize" value="Poster" name="write_post" />
-								</form>
-							</div>
-						</article>
-						<?php } ?>
-						<?= listComments($COMMENTS, $BILLET, $User); ?>
-					</div>
-				</section>
+	
+	<div class="content type1">
+		<h3 class="ttr title titre"><?= $chapter_name; ?></h3>	
+		<section class="content">
+			<?php if($chapter_valid === true) { ?>
+			<div class="bil-head" >
+				<p>Ajouté le <?= datefr($chapter['date_create'], '%1%/%2%/%3%') ?></p>
+				<p>Dernière mise à jour le <?= datefr($chapter['date_edit'], '%1%/%2%/%3% à %4%h%5%') ?></p>
+				<?php if($PROFILE->isAdmin()) { ?>
+				<a class="admin-button" href="<?= WEBROOT.'chapitres/edit/'.$chapter['id'].'-'.textToUrl($chapter['titre']) ?>" rel="nofollow" >Modifier</a>
 				<?php } ?>
-                
-            </div>
-			
+			</div>
+			<div class="bil-body" >
+				<p><?= $chapter['texte'] ?></p>
+			</div>
+			<div class="comments" id="coms" >
+				<h4>Commentaires</h4>
+				<?php
+				if($PROFILE->isLogged()) { ?>
+				<article class="Comment" >
+					<span class="username" >> <?= htmlentities($PROFILE->get('pseudo')) ?></span>
+					<form method="POST" spellcheck="true" >
+						<textarea name="_ncom-text" required="required" placeholder="Message..." ></textarea>
+						<input type="submit" name="_ncom-post" value="Envoyer" />
+					</form>
+				</article>
+				<?php }
+				for($n=0;$n!=count($comments); $n++) { ?>
+				<article class="Comment" >
+					<span class="username" >> <?= htmlentities($comments[$n]['pseudo']) ?><?php
+					if(strtolower($comments[$n]['pseudo']) != strtolower($PROFILE->get('pseudo')) && $PROFILE->isLogged() && $comments[$n]['moderated'] == 0 && !contains('-'.strtolower($PROFILE->get('pseudo')).'-', $comments[$n]['report_names'])) { ?>
+						<a class="report" href="<?= WEBROOT.'chapitres/lire/'.$chapter['id'].'-'.textToUrl($chapter['titre']).'/r/'.$comments[$n]['id'] ?>" >Report</a>
+					<?php }
+					?></span>
+					<p class="content" ><?= nl2br($comments[$n]['text']); ?></p>
+				</article>
+				<?php } ?>
+			</div>
+			<?php } else {
+				info('error', 'Chapitre inconnu.');
+			} ?>
 		</section>
-		<?php } else {
-			info('error', "Ce chapitre n'existe pas");
-		} ?>
 	</div>
 	
 </div>
